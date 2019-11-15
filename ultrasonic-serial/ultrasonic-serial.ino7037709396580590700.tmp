@@ -1,0 +1,49 @@
+#include <BoltIoT-Arduino-Helper.h>
+#include <SoftwareSerial.h>
+
+SoftwareSerial bolt(3,2);
+const int trigPin = 6;
+const int echoPin = 7;
+int alert = 10;
+float duration, distance;
+
+void setup() {
+  // boltiot.Begin(2, 3); //Initialize the Bolt interface over software serial uart.
+       //In this example Tx pin of Bolt is connected to pin 3 of Arduino
+       //and Rx pin of Bolt is connected to pin 4 of Arduino
+  
+   //Set pin 2 as input. We will send this pin's state as the data to the Bolt Cloud
+  bolt.begin(9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(alert, OUTPUT);
+  Serial.begin(9600);
+}
+void loop() {
+
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = (duration*.0343)/2;
+  Serial.println(distance);
+  if(distance <= 100) {
+    bolt.write("1\n");  
+    digitalWrite(alert, HIGH);
+    delay(2000);
+     //Send data to the Bolt Cloud, when the Bolt polls the Arduino for data.
+      //This function needs to be called regularly. Calling the CheckPoll function once every seconds is required
+  } 
+  else {
+    bolt.write("0\n");
+    digitalWrite(alert, LOW);
+    delay(2000);
+  }
+  delay(10);
+  
+   //Send data to the Bolt Cloud, when the Bolt polls the Arduino for data.
+//This function needs to be called regularly. Calling the CheckPoll function once every seconds is required
+}
