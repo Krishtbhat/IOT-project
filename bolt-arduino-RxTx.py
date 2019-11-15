@@ -1,6 +1,7 @@
 from boltiot import Bolt
 from time import sleep
-import json, temp_alert_telegram.conf_telegram, requests
+import json, telgram_credentials.conf_telegram
+import subprocess, os, signal, requests, logging
 
 api_key = "9555ccc7-de9e-4493-bf4d-bca28cd5d96d"
 device_id = "BOLT3848004"
@@ -8,9 +9,9 @@ mb = Bolt(api_key, device_id)
 
 def send_telegram_message(message):
     """Sends message via Telegram"""
-    url = "https://api.telegram.org/" + temp_alert_telegram.conf_telegram.telegram_bot_id + "/sendMessage"
+    url = "https://api.telegram.org/" + telgram_credentials.conf_telegram.telegram_bot_id + "/sendMessage"
     data = {
-        "chat_id": temp_alert_telegram.conf_telegram.telegram_chat_id,
+        "chat_id": telgram_credentials.conf_telegram.telegram_chat_id,
         "text": message
     }
     try:
@@ -28,8 +29,9 @@ def send_telegram_message(message):
         print(e)
         return False
 
+response = mb.serialBegin('9600')
 while True:
-    response = mb.serialBegin('9600')
+    
     response1 = mb.serialRead('10') 
     dread = mb.digitalRead("1")
     data = json.loads(response1)
@@ -37,12 +39,23 @@ while True:
     print("From Rx: ", data["value"])
     print(dread)
     
-    if True:
+    if dread1["value"] == 1 or data["value"] == 1:
+        
+        # creating a subprocess to take images from ov7670
+        take_image = subprocess.Popen("java -cp C:/\"Program Files (x86)\"/Java/jdk1.8.0_221/bin/code; While", stdin=subprocess.PIPE, shell=True)
+        sleep(5)
+        os.kill(take_image.pid, signal.CTRL_C_EVENT)
+
+        # to fetch the image from out folder 
+
+
         message = """Alert! Someone is near the door!!!
 Click on the following link to display a message.
 https://cloud.boltiot.com/control?name=BOLT3848004"""
-        print(message)
+
+        '''
         telegram_status = send_telegram_message(message)
         print("This is the Telegram status:", telegram_status)
+        '''
         sleep(30)
     sleep(1)
