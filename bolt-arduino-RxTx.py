@@ -46,8 +46,8 @@ while True:
         # creating a subprocess to take images from ov7670
         command = '''
 C:
-cd \"Program Files (x86)\"\\Java\\jdk1.8.0_221\\bin\\code
-java While
+cd \"Program Files (x86)\"\\Java\\jdk1.8.0_221\\bin
+java code.SimpleRead
 '''
         # proc = subprocess.Popen('cmd.exe', stdin=subprocess.PIPE, shell=True)
         # try:
@@ -57,9 +57,8 @@ java While
         #     print("OK")
         #     os.kill(proc.pid, signal.CTRL_C_EVENT)
 
-        pro = subprocess.Popen("python while.py", stdin=subprocess.PIPE, shell=True)
-        _, _ = pro.communicate()
-        sleep(3)
+        pro = subprocess.Popen('cmd.exe', stdin=subprocess.PIPE, shell=True)
+        _, _ = pro.communicate(command.encode("utf-8"))
 
         # to fetch the image from out folder 
 
