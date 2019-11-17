@@ -40,7 +40,7 @@ while True:
     print("From Rx: ", data["value"])
     print(dread)
     
-    # if dread1["value"] == 1 or data["value"] == 1:
+    # if dread1["value"] == '1' or data["value"] == '1':
     if count % 3 == 0:
         
         # creating a subprocess to take images from ov7670
