@@ -29,9 +29,10 @@ def send_telegram_message(message):
         print(e)
         return False
 
+count = 0
 response = mb.serialBegin('9600')
 while True:
-    
+    count += 1
     response1 = mb.serialRead('10') 
     dread = mb.digitalRead("1")
     data = json.loads(response1)
@@ -39,23 +40,37 @@ while True:
     print("From Rx: ", data["value"])
     print(dread)
     
-    if dread1["value"] == '1' or data["value"] == 1:
+    # if dread1["value"] == 1 or data["value"] == 1:
+    if count % 3 == 0:
         
         # creating a subprocess to take images from ov7670
-        #take_image = subprocess.Popen("java -cp C:/\"Program Files (x86)\"/Java/jdk1.8.0_221/bin/code; While", stdin=subprocess.PIPE, shell=True)
-        #sleep(5)
-        #os.kill(take_image.pid, signal.CTRL_C_EVENT)
+        command = '''
+C:
+cd \"Program Files (x86)\"\\Java\\jdk1.8.0_221\\bin\\code
+java While
+'''
+        # proc = subprocess.Popen('cmd.exe', stdin=subprocess.PIPE, shell=True)
+        # try:
+        #     proc.communicate(command.encode("utf-8"), timeout=5)
+        # except Exception as e:
+        #     #subprocess.Popen("TASKKILL /F /PID {pid} /T".format(pid=process.pid), shell=True)
+        #     print("OK")
+        #     os.kill(proc.pid, signal.CTRL_C_EVENT)
+
+        pro = subprocess.Popen("python while.py", stdin=subprocess.PIPE, shell=True)
+        _, _ = pro.communicate()
+        sleep(3)
 
         # to fetch the image from out folder 
 
-
+        print("Done!!")
         message = """Alert! Someone is near the door!!!
 Click on the following link to display a message.
 https://cloud.boltiot.com/control?name=BOLT3848004"""
 
         
-        telegram_status = send_telegram_message(message)
-        print("This is the Telegram status:", telegram_status)
+        # telegram_status = send_telegram_message(message)
+        # print("This is the Telegram status:", telegram_status)
    
-        sleep(30)
+        sleep(10)
     sleep(1)
