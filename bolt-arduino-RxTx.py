@@ -39,12 +39,12 @@ while True:
     print("From Rx: ", data["value"])
     print(dread)
     
-    if dread1["value"] == 1 or data["value"] == 1:
+    if dread1["value"] == '1' or data["value"] == 1:
         
         # creating a subprocess to take images from ov7670
-        take_image = subprocess.Popen("java -cp C:/\"Program Files (x86)\"/Java/jdk1.8.0_221/bin/code; While", stdin=subprocess.PIPE, shell=True)
-        sleep(5)
-        os.kill(take_image.pid, signal.CTRL_C_EVENT)
+        #take_image = subprocess.Popen("java -cp C:/\"Program Files (x86)\"/Java/jdk1.8.0_221/bin/code; While", stdin=subprocess.PIPE, shell=True)
+        #sleep(5)
+        #os.kill(take_image.pid, signal.CTRL_C_EVENT)
 
         # to fetch the image from out folder 
 
@@ -53,9 +53,9 @@ while True:
 Click on the following link to display a message.
 https://cloud.boltiot.com/control?name=BOLT3848004"""
 
-        '''
+        
         telegram_status = send_telegram_message(message)
         print("This is the Telegram status:", telegram_status)
-        '''
+   
         sleep(30)
     sleep(1)

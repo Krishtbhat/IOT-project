@@ -1,6 +1,6 @@
 //#include <SerialIoT-Arduino-Helper.h>
 #include <SoftwareSerial.h>
-#include <Thread.h>
+//#include <Thread.h>
 #include <Servo.h>
 #include <LiquidCrystal.h>
 
@@ -53,10 +53,7 @@ void setup() {
   
 }
 void loop() {
-  lcd.setCursor(0, 0);
-  lcd.print("                ");
-  lcd.setCursor(0, 1);
-  lcd.print("                ");
+  lcd.clear();
   if(checkB)
     check();
   else if(activateB)
@@ -143,13 +140,15 @@ void activate(){
     digitalWrite(buzzer, LOW);
     Serial.println(message);
     if(message.length() > 16){
-      msg1 = message.substring(0, 16);
-      msg2 = message.substring(16, 32);
+      lcd.setCursor(0, 0);
+      lcd.print(message.substring(0, 16));
+      lcd.setCursor(0, 1);
+      lcd.print(message.substring(16, message.length()));
     }
-    lcd.setCursor(0, 0);
-    lcd.print(msg1);
-    lcd.setCursor(0, 1);
-    lcd.print(msg2);
+    else{
+      lcd.setCursor(0, 0);
+      lcd.print(message);
+    }
     //switch off the led
     //based on command open
     if(command == 'o'){
