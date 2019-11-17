@@ -53,7 +53,10 @@ void setup() {
   
 }
 void loop() {
+  lcd.setCursor(0, 0);
+  lcd.print("                ");
   lcd.setCursor(0, 1);
+  lcd.print("                ");
   if(checkB)
     check();
   else if(activateB)
@@ -96,6 +99,7 @@ void activate(){
   digitalWrite(alert, HIGH);
 
   //waiting for the users reply
+  String msg1, msg2;
   unsigned long start = millis();
   bool flag = false;
   char letter, command = '\0';
@@ -138,7 +142,14 @@ void activate(){
     delay(500);
     digitalWrite(buzzer, LOW);
     Serial.println(message);
-    lcd.print(message);
+    if(message.length() > 16){
+      msg1 = message.substring(0, 16);
+      msg2 = message.substring(16, 32);
+    }
+    lcd.setCursor(0, 0);
+    lcd.print(msg1);
+    lcd.setCursor(0, 1);
+    lcd.print(msg2);
     //switch off the led
     //based on command open
     if(command == 'o'){
@@ -154,6 +165,9 @@ void activate(){
           break;
         }
       }
+    }
+    else{
+      delay(10000);
     }
     //close the door
 //    start = millis();
@@ -176,7 +190,10 @@ void activate(){
     delay(500);
     digitalWrite(buzzer, LOW);
     Serial.println("Please come later ");
-    lcd.print("Please come later ");
+    lcd.setCursor(0, 0);
+    lcd.print("Please come back");
+    lcd.setCursor(0, 1);
+    lcd.print("later");
     
   }
   closeDoor();
