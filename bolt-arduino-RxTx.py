@@ -1,6 +1,5 @@
 from boltiot import Bolt
-from time import sleep
-import json
+import json, time
 from telgram_credentials.conf_telegram import *
 import subprocess, requests, logging
 
@@ -39,7 +38,7 @@ while True:
     dread1 = json.loads(dread)
     print(dread)
     
-    if dread1["value"] == '1' or data["value"] == '1':
+    if True: #dread1["value"] == '1' or data["value"] == '1':
         
         # creating a subprocess to take images from ov7670 camera module
         command = '''C:
@@ -57,8 +56,10 @@ java code.SimpleRead
 Click on the following link to display a message.
 https://cloud.boltiot.com/control?name=BOLT3848004"""
 
-        telegram_status = send_telegram_message(message)
-        print("This is the Telegram status:", telegram_status)
+        # telegram_status = send_telegram_message(message)
+        # print("This is the Telegram status:", telegram_status)
    
-        sleep(10)
-    sleep(1)
+        start = time.perf_counter()
+        while(start + 10.0 > time.perf_counter() and json.loads(mb.digitalRead('1'))["value"] != '1'):
+            pass
+    time.sleep(1)
