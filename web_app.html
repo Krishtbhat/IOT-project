@@ -9,7 +9,8 @@
     <body>    
         <br>
         <center>
-            <p><h3>Please Enter a message to display :</h3>
+            <h3>Please Enter a message to display :</h3>
+            <p>
                 <textarea rows = "2" cols = "40" maxlength = "32" id = "message"  placeholder="Message should be of maximum 32 characters." name = "message" required></textarea>
             </p>
             <button class= "btn btn-primary" id="submit_button" onclick = 'submitMessage();'>Submit</button>
@@ -28,16 +29,16 @@
             <div id="openClose" style="visibility: hidden;">
                 <h3>Open or Close the door</h3>
                 <button value="open" class='btn btn-success' id="openbutton" onclick="swapButton('closebutton', 'openbutton', 'o');">OPEN</button>&nbsp;&nbsp;
-                <button value="close" class='btn btn-dark' id ="closebutton"  onclick="swapButton('openbutton', 'closebutton', 'c');">CLOSE</button>
+                <button value="close" class='btn btn-dark btn' id ="closebutton"  onclick="swapButton('openbutton', 'closebutton', 'c');" disabled>CLOSE</button>
             </div>
         </center>
         <script>
-            var message = ' ';
+            var message = '';
             function submitMessage(){
-                if(document.getElementById('message').value != '') {
-                    alert(document.getElementById('message').value);
-                    msg = document.getElementById("message");
-                    message = msg.value + '|';
+                msg = document.getElementById("message");
+                if(msg.value != '') {
+                    alert(msg.value);
+                    message = 'a@' + msg.value + '|';
 
                     resp = httpRequest("https://cloud.boltiot.com/remote/9555ccc7-de9e-4493-bf4d-bca28cd5d96d/serialWrite?data="+ message +"&deviceName=BOLT3848004");
 
@@ -45,7 +46,7 @@
                     msg.value = '';
                 } 
                 else {
-                    alert('Please enter a valid message');
+                    alert('Please enter a message');
                     document.getElementById("door").style.visibility = "hidden";
                 }   
             }

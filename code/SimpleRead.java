@@ -1,106 +1,83 @@
 package code;
 
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Enumeration;
-import javax.comm.CommPortIdentifier;
-import javax.comm.PortInUseException;
-import javax.comm.SerialPort;
-import javax.comm.UnsupportedCommOperationException;
-
+import javax.comm.*;
+import java.util.*;
+import java.io.*;
 import java.io.*;
 
-public class SimpleRead {
-	private static final  char[]COMMAND = {'*', 'R', 'D', 'Y', '*'};
-	private static final int WIDTH = 320; //640;
-    private static final int HEIGHT = 240; //480;
-    	
+
+public class SimpleRead
+{
+    private static final char[] COMMAND;
+    private static final int WIDTH = 320;
+    private static final int HEIGHT = 240;
     private static CommPortIdentifier portId;
     InputStream inputStream;
     SerialPort serialPort;
-
-    public static void main(String[] args) {
-    	 Enumeration portList = CommPortIdentifier.getPortIdentifiers();
-
-        while (portList.hasMoreElements()) {
-        	portId = (CommPortIdentifier) portList.nextElement();
-            if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-            	System.out.println("Port name: " + portId.getName());
-                if (portId.getName().equals("COM5")) {
-                	SimpleRead reader = new SimpleRead();
+    
+    public static void main(final String[] array) {
+        final Enumeration portIdentifiers = CommPortIdentifier.getPortIdentifiers();
+        while (portIdentifiers.hasMoreElements()) {
+            portId = (CommPortIdentifier) portIdentifiers.nextElement();
+            if (SimpleRead.portId.getPortType() == 1) {
+                System.out.println("Port name: " + SimpleRead.portId.getName());
+                if (!SimpleRead.portId.getName().equals("COM5")) {
+                    continue;
                 }
+                final SimpleRead simpleRead = new SimpleRead();
             }
         }
     }
-
+    
     public SimpleRead() {
-       	int[][]rgb = new int[HEIGHT][WIDTH];
-       	int[][]rgb2 = new int[WIDTH][HEIGHT];
-    	
-    	try {
-            serialPort = (SerialPort) portId.open("SimpleReadApp", 1000);
-            inputStream = serialPort.getInputStream();
+        final int[][] array = new int[HEIGHT][WIDTH];
+        final int[][] array2 = new int[WIDTH][HEIGHT];
+        try {
+            this.serialPort = (SerialPort)SimpleRead.portId.open("SimpleReadApp", 1000);
+            this.inputStream = this.serialPort.getInputStream();
+            this.serialPort.setSerialPortParams(1000000, 8, 1, 0);
+            int n = 0;
 
-            serialPort.setSerialPortParams(1000000,
-                SerialPort.DATABITS_8,
-                SerialPort.STOPBITS_1,
-                SerialPort.PARITY_NONE);
-
-			int counter = 0;
-			int imageCount = 0;
-
-        	while(imageCount < 5) {
-        		System.out.println("Looking for image");
-        	
-        		while(!isImageStart(inputStream, 0)){};
-        	
-	        	System.out.println("Found image: " + counter);
-	        	
-	        	for (int y = 0; y < HEIGHT; y++) {
-	        		for (int x = 0; x < WIDTH; x++) {
-		       			int temp = read(inputStream);
-		    			rgb[y][x] = ((temp&0xFF) << 16) | ((temp&0xFF) << 8) | (temp&0xFF);
-	        		}
-	        	}
-	        	
-	        	for (int y = 0; y < HEIGHT; y++) {
-		        	for (int x = 0; x < WIDTH; x++) {
-		        		rgb2[x][y]=rgb[y][x];
-		        	}	        		
-	        	}
-	        	
-		        BMP bmp = new BMP();
-	      		bmp.saveBMP("D:/BMSCE/sem5/IOT-project/images/" + (counter++) + ".bmp", rgb2);
-	      		
-				System.out.println("Saved image: " + counter);
-				imageCount += 1;  
-        	}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            while (n <= 1) {
+                System.out.println("Looking for image");
+                while (!this.isImageStart(this.inputStream, 0)) {}
+                System.out.println("Found image: " + n);
+                for (int i = 0; i < HEIGHT; ++i) {
+                    for (int j = 0; j < WIDTH; ++j) {
+                        final int read = this.read(this.inputStream);
+                        array[i][j] = ((read & 0xFF) << 16 | (read & 0xFF) << 8 | (read & 0xFF));
+                    }
+                }
+                for (int k = 0; k < HEIGHT; ++k) {
+                    for (int l = 0; l < WIDTH; ++l) {
+                        array2[l][k] = array[k][l];
+                    }
+                }
+                new BMP().saveBMP("D:/BMSCE/sem5/IOT-project/images/" + n + ".bmp", array2);
+                System.out.println("Saved image: " + (n++));
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
     
-    private int read(InputStream inputStream) throws IOException {
-    	int temp = (char) inputStream.read();
-		if (temp == -1) {
-			throw new  IllegalStateException("Exit");
-		}
-		return temp;
+    private int read(final InputStream inputStream) throws IOException {
+        final char c = (char)inputStream.read();
+        if (c == -1) {
+            throw new IllegalStateException("Exit");
+        }
+        return c;
     }
-    	
-    private boolean isImageStart(InputStream inputStream, int index) throws IOException {
-    	if (index < COMMAND.length) {
-    		if (COMMAND[index] == read(inputStream)) {
-    			return isImageStart(inputStream, ++index);
-    		} else {
-    			return false;
-    		}
-    	}
-    	return true;
+    
+    private boolean isImageStart(final InputStream inputStream, int n) throws IOException {
+        return n >= SimpleRead.COMMAND.length || (SimpleRead.COMMAND[n] == this.read(inputStream) && this.isImageStart(inputStream, ++n));
+    }
+    
+    static {
+        COMMAND = new char[] { '*', 'R', 'D', 'Y', '*' };
     }
 }
-
 
 class BMP
 {
