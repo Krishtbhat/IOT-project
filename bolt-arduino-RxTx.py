@@ -1,8 +1,8 @@
-from boltiot import Bolt
+from boltiot import boltiot
+import telegram
 import json, time
 from telgram_credentials.conf_telegram import *
 import subprocess, requests
-import telegram
 
 api_key = "9555ccc7-de9e-4493-bf4d-bca28cd5d96d"
 device_id = "BOLT3848004"
@@ -18,6 +18,7 @@ def send_telegram_message(message, img_count):
         "chat_id": telegram_chat_id,
         "text": message
     }
+    
     try:
         response = requests.request(
             "GET",
@@ -36,6 +37,8 @@ def send_telegram_message(message, img_count):
 
 
 response = mb.serialBegin('9600')
+with open("fnum.txt", 'r') as f:
+    imageNum = len(f.read().split())
 while True:
     # response1 = mb.serialRead('10') 
     dread = mb.digitalRead("1")
@@ -72,7 +75,6 @@ https://cloud.boltiot.com/control?name=BOLT3848004"""
             telegram_status = send_telegram_message(message, 20)
         else:
             telegram_status = send_telegram_message(message, image_count-1)
-        print("This is the Telegram status:", telegram_status)
    
         start = time.perf_counter()
         while(start + 10.0 > time.perf_counter() and json.loads(mb.digitalRead('1'))["value"] != '1'):
