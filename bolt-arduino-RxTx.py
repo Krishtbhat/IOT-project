@@ -1,7 +1,7 @@
 from boltiot import Bolt
 import json, time
 from telgram_credentials.conf_telegram import *
-import subprocess, requests, logging
+import subprocess, requests
 import telegram
 
 api_key = "9555ccc7-de9e-4493-bf4d-bca28cd5d96d"
@@ -10,7 +10,7 @@ mb = Bolt(api_key, device_id)
 
 bot = telegram.Bot(token = "1031896771:AAFlMFR1Q7Z8kdxD9M4MNiPaUZkMBl7hv4I")
 
-def send_telegram_message(message):
+def send_telegram_message(message, img_count):
     """Sends message via Telegram"""
     global bot
     url = "https://api.telegram.org/" + telegram_bot_id + "/sendMessage"
@@ -24,7 +24,7 @@ def send_telegram_message(message):
             url,
             params=data
         )
-        bot.send_photo(chat_id = "@alerts_boltIOT19", photo = open("./images/1.bmp", "rb"))
+        bot.send_photo(chat_id = "@alerts_boltIOT19", photo = open("./images/"+str(img_count)+".bmp", "rb"))
         print("This is the Telegram response")
         print(response.text)
         telegram_data = json.loads(response.text)
@@ -68,7 +68,10 @@ java code.SimpleRead '''+ image_count +'''
 Click on the following link to display a message.
 https://cloud.boltiot.com/control?name=BOLT3848004"""
 
-        telegram_status = send_telegram_message(message)
+        if image_count == 0:
+            telegram_status = send_telegram_message(message, 20)
+        else:
+            telegram_status = send_telegram_message(message, image_count-1)
         print("This is the Telegram status:", telegram_status)
    
         start = time.perf_counter()
