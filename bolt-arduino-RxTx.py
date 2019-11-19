@@ -75,6 +75,10 @@ https://cloud.boltiot.com/control?name=BOLT3848004"""
             telegram_status = send_telegram_message(message, image_count-1)
    
         start = time.time()
-        while(start + 180.0 > time.time() and json.loads(mb.digitalRead('2'))["value"] != '1'):
-            pass
+        while(start + 180.0 > time.time()):
+            blah = mb.digitalRead('2')
+            blah = json.loads(blah)
+            print(blah)
+            if blah["value"] == "1":
+                break
     time.sleep(1)
