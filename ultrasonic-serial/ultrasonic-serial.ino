@@ -210,7 +210,7 @@ void activate(){
 
 void openDoor(){
   for(int i = 90; i>=0; i--){
-    motor.write(i);
+    door.write(i);
     delay(30);
   }
   
@@ -218,7 +218,7 @@ void openDoor(){
 
 void closeDoor(){
   for(int i = 0; i<=90; i++){
-    motor.write(i);
+    door.write(i);
     delay(30);
   }
 }
