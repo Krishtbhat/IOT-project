@@ -37,8 +37,6 @@ def send_telegram_message(message, img_count):
 
 
 response = mb.serialBegin('9600')
-with open("fnum.txt", 'r') as f:
-    imageNum = len(f.read().split())
 while True:
     # response1 = mb.serialRead('10') 
     dread = mb.digitalRead("1")
