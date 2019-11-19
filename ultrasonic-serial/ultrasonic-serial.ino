@@ -77,13 +77,17 @@ void check(){
   if(distance <= 50 && distance > 1) {
 //    checkThread.enabled = false;
 //    activateThread.enabled = true;
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Reaching the ");
+    lcd.setCursor(0, 1);
+    lcd.print("owner, wait...");
     checkB = false;
     activateB = true;
     digitalWrite(ledPin, HIGH);
     return;
   } 
   else {
-    bolt.write("0\n");
     digitalWrite(alert, LOW);
   }
   delay(1000);
@@ -91,7 +95,6 @@ void check(){
 
 //for activate thread
 void activate(){
-  bolt.write("1\n");  
   //arduino to the cloud
   digitalWrite(alert, HIGH);
 
@@ -135,17 +138,22 @@ void activate(){
   //if there is a message from the user
   if(flag){
     //print to lcd and buzzer
+    digitalWrite(alert, HIGH);
+    delay(40);
+    digitalWrite(alert, LOW);
     digitalWrite(buzzer, HIGH);
     delay(500);
     digitalWrite(buzzer, LOW);
     Serial.println(message);
     if(message.length() > 16){
+      lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print(message.substring(0, 16));
       lcd.setCursor(0, 1);
       lcd.print(message.substring(16, message.length()));
     }
     else{
+      lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print(message);
     }
@@ -190,10 +198,10 @@ void activate(){
     digitalWrite(buzzer, LOW);
     Serial.println("Please come later ");
     lcd.setCursor(0, 0);
-    lcd.print("Please come back");
+    lcd.print("Owner did not ");
     lcd.setCursor(0, 1);
-    lcd.print("later");
-    
+    lcd.print("respond. Sorry!");
+    delay(10000);
   }
   closeDoor();
   checkB = true;
