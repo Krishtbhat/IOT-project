@@ -1,6 +1,4 @@
-//#include <SerialIoT-Arduino-Helper.h>
 #include <SoftwareSerial.h>
-//#include <Thread.h>
 #include <Servo.h>
 #include <LiquidCrystal.h>
 
@@ -15,6 +13,7 @@ Servo door;
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 int alert = A1;
+int alert2 = A2;
 float duration, distance;
 bool checkB, activateB;
 
@@ -138,10 +137,10 @@ void activate(){
   //if there is a message from the user
   if(flag){
     //print to lcd and buzzer
-    digitalWrite(alert, HIGH);
+    //digitalWrite(alert2, HIGH);
     delay(40);
-    digitalWrite(alert, LOW);
     digitalWrite(buzzer, HIGH);
+    //digitalWrite(alert2, LOW);
     delay(500);
     digitalWrite(buzzer, LOW);
     Serial.println(message);
