@@ -201,16 +201,16 @@ void activate(){
 }
 
 void openDoor(){
-  for(int i = 0; i<=180; i+=5){
-    door.write(i);
-    delay(20);
+  for(int i = 90; i>=0; i--){
+    motor.write(i);
+    delay(30);
   }
   
 }
 
 void closeDoor(){
-  for(int i = 180; i>=0; i-=5){
-    door.write(i);
-    delay(20);
+  for(int i = 0; i<=90; i++){
+    motor.write(i);
+    delay(30);
   }
 }

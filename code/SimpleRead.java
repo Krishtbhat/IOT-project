@@ -15,47 +15,46 @@ public class SimpleRead
     InputStream inputStream;
     SerialPort serialPort;
     
-    public static void main(final String[] array) {
+    public static void main(final String[] args) {
         final Enumeration portIdentifiers = CommPortIdentifier.getPortIdentifiers();
+        int image_count = Integer.parseInt(args[0]);
         while (portIdentifiers.hasMoreElements()) {
             portId = (CommPortIdentifier) portIdentifiers.nextElement();
             if (SimpleRead.portId.getPortType() == 1) {
                 System.out.println("Port name: " + SimpleRead.portId.getName());
-                if (!SimpleRead.portId.getName().equals("COM5")) {
+                if (!SimpleRead.portId.getName().equals("COM4")) {
                     continue;
                 }
-                final SimpleRead simpleRead = new SimpleRead();
+                new SimpleRead(image_count);
             }
         }
     }
     
-    public SimpleRead() {
+    public SimpleRead(int n) {
         final int[][] array = new int[HEIGHT][WIDTH];
         final int[][] array2 = new int[WIDTH][HEIGHT];
         try {
             this.serialPort = (SerialPort)SimpleRead.portId.open("SimpleReadApp", 1000);
             this.inputStream = this.serialPort.getInputStream();
             this.serialPort.setSerialPortParams(1000000, 8, 1, 0);
-            int n = 0;
 
-            while (n <= 1) {
-                System.out.println("Looking for image");
-                while (!this.isImageStart(this.inputStream, 0)) {}
-                System.out.println("Found image: " + n);
-                for (int i = 0; i < HEIGHT; ++i) {
-                    for (int j = 0; j < WIDTH; ++j) {
-                        final int read = this.read(this.inputStream);
-                        array[i][j] = ((read & 0xFF) << 16 | (read & 0xFF) << 8 | (read & 0xFF));
-                    }
+            System.out.println("Looking for image");
+            while (!this.isImageStart(this.inputStream, 0)) {}
+            System.out.println("Found image: " + n);
+            for (int i = 0; i < HEIGHT; ++i) {
+                for (int j = 0; j < WIDTH; ++j) {
+                    final int read = this.read(this.inputStream);
+                    array[i][j] = ((read & 0xFF) << 16 | (read & 0xFF) << 8 | (read & 0xFF));
                 }
-                for (int k = 0; k < HEIGHT; ++k) {
-                    for (int l = 0; l < WIDTH; ++l) {
-                        array2[l][k] = array[k][l];
-                    }
-                }
-                new BMP().saveBMP("D:/BMSCE/sem5/IOT-project/images/" + n + ".bmp", array2);
-                System.out.println("Saved image: " + (n++));
             }
+            for (int k = 0; k < HEIGHT; ++k) {
+                for (int l = 0; l < WIDTH; ++l) {
+                    array2[l][k] = array[k][l];
+                }
+            }
+            new BMP().saveBMP("D:/IOT-project/images/" + n + ".bmp", array2);
+            System.out.println("Saved image: " + (n));
+
         }
         catch (Exception ex) {
             ex.printStackTrace();
