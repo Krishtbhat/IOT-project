@@ -203,7 +203,8 @@ void activate(){
     lcd.print("respond. Sorry!");
     delay(10000);
   }
-  closeDoor();
+  if(command == 'c' || command == 'o')
+    closeDoor();
   checkB = true;
   activateB = false;
 }
