@@ -1,4 +1,4 @@
-from boltiot import boltiot
+from boltiot import Bolt
 import telegram
 import json, time
 from telgram_credentials.conf_telegram import *
@@ -76,7 +76,7 @@ https://cloud.boltiot.com/control?name=BOLT3848004"""
         else:
             telegram_status = send_telegram_message(message, image_count-1)
    
-        start = time.perf_counter()
-        while(start + 10.0 > time.perf_counter() and json.loads(mb.digitalRead('1'))["value"] != '1'):
+        start = time.time()
+        while(start + 180.0 > time.time() and json.loads(mb.digitalRead('2'))["value"] != '1'):
             pass
     time.sleep(1)

@@ -36,6 +36,7 @@ void setup() {
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
   pinMode(alert, OUTPUT);
+  pinMode(alert2, OUTPUT);
   pinMode(buzzer, OUTPUT);
   pinMode(ledPin, OUTPUT);
   lcd.begin(16, 2);
@@ -216,8 +217,13 @@ void openDoor(){
 }
 
 void closeDoor(){
+  
   for(int i = 0; i<=90; i++){
     door.write(i);
     delay(30);
   }
+  delay(1000);
+  digitalWrite(alert2, HIGH);
+  delay(100);
+  digitalWrite(alert2, LOW);
 }
