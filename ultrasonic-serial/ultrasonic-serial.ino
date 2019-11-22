@@ -15,7 +15,7 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 int alert = A1;
 int alert2 = A2;
 float duration, distance;
-bool checkB, activateB;
+bool checkB, activateB, reachingOwner = false;
 
 
 //function prototypes
@@ -43,7 +43,8 @@ void setup() {
   
 }
 void loop() {
-  lcd.clear();
+  if(!reachingOwner)
+    lcd.clear();
   if(checkB)
     check();
   else if(activateB)
@@ -63,6 +64,7 @@ void check(){
   distance = (duration*.0343)/2;
   Serial.println(distance);
   if(distance <= 50 && distance > 1) {
+    reachingOwner = true;
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Reaching the ");
@@ -74,6 +76,7 @@ void check(){
     return;
   } 
   else {
+    reachingOwner = false;
     digitalWrite(alert, LOW);
   }
   delay(1000);
@@ -199,6 +202,6 @@ void closeDoor(){
   }
   delay(1000);
   digitalWrite(alert2, HIGH);
-  delay(500);
+  delay(1000);
   digitalWrite(alert2, LOW);
 }
