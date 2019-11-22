@@ -5,39 +5,71 @@
         <script type="text/javascript" src="https://cloud.boltiot.com/static/js/boltCommands.js"></script>
         <script type="text/javascript">setKey('9555ccc7-de9e-4493-bf4d-bca28cd5d96d','BOLT3848004');</script>
     </head>
-
+    <style type="text/css">
+        .tarea {
+            border-color: black;
+            border-style: solid;
+            border-width: 2px;
+        }
+    </style>
     <body>    
         <br>
-        <center>
-            <h3>Please Enter a message to display :</h3>
-            <p>
-                <textarea rows = "2" cols = "40" maxlength = "32" id = "message"  placeholder="Message should be of maximum 32 characters." name = "message" required></textarea>
-            </p>
-            <button class= "btn btn-primary" id="submit_button" onclick = 'submitMessage();'>Submit</button>
-            <br><br>
+        <center><h1>Smart Door System</h1></center>
+        <br><br>
+        <div class="container">
+        <div class="row">
+            <div class="col-sm-1">
 
-            <div id="door" style="visibility:hidden;">
-                <h3>Do you want the person to enter the house?</h3>
-                <p>
-                    <button value="open" class='btn btn-success' id="yes_button" onclick="openCloseDiv();">YES</button>&nbsp;&nbsp;
-                    <button value="close" class='btn btn-danger' id ="no_button"  onclick="declineDoor();">NO</button>    
-                </p>
-                <br>
-            </div>  
-            <br>
-            
-            <div id="openClose" style="visibility: hidden;">
-                <h3>Open or Close the door</h3>
-                <button value="open" class='btn btn-success' id="openbutton" onclick="swapButton('closebutton', 'openbutton', 'o');">OPEN</button>&nbsp;&nbsp;
-                <button value="close" class='btn btn-dark btn' id ="closebutton"  onclick="swapButton('openbutton', 'closebutton', 'c');" disabled>CLOSE</button>
             </div>
-        </center>
+            <div class="col-sm-10" align="center">
+                <h3>Please Enter a message to display :</h3>
+                <p>
+                    <textarea class="tarea" rows = "3" cols = "50" maxlength = "32" id = "message"  placeholder="Message should be of maximum 32 characters." name = "message" required></textarea>
+                </p>
+                    <button class= "btn btn-primary" id="submit_button" onclick = 'submitMessage();'>Submit</button>
+                <br><br>
+            </div>
+            <div class="col-sm-1">
+
+            </div>
+        </div>
+        <div class="row" align="center">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-10">
+                <div id="door" style="visibility:hidden;">
+                    <h3>Do you want the person to enter the house?</h3>
+                    <p>
+                        <button value="open" class='btn btn-success' id="yes_button" onclick="openCloseDiv();">YES</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button value="close" class='btn btn-danger' id ="no_button"  onclick="declineDoor();">NO</button>    
+                    </p>
+                    <br>
+                </div>
+            </div>
+            <div class="col-sm-1">
+            </div>
+            <br>
+        </div>
+        <div class="row" align="center">
+            <div class="col-sm-1">
+            </div>
+            <div class="col-sm-10">
+                <div id="openClose" style="visibility: hidden;">
+                    <h4>Open or Close the door</h4>
+                    <button value="open" class='btn btn-success' id="openbutton" onclick="swapButton('closebutton', 'openbutton', 'o');">OPEN</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button value="close" class='btn btn-dark btn' id ="closebutton"  onclick="swapButton('openbutton', 'closebutton', 'c');" disabled>CLOSE</button>
+                </div>
+            </div>
+            <div class="col-sm-1">
+            </div>
+        </div>
+        </div>
+
         <script>
             var message = '';
             function submitMessage(){
                 msg = document.getElementById("message");
                 if(msg.value != '') {
-                    // alert(msg.value);
                     message = 'a@' + msg.value + '|';
 
                     resp = httpRequest("https://cloud.boltiot.com/remote/9555ccc7-de9e-4493-bf4d-bca28cd5d96d/serialWrite?data="+ message +"&deviceName=BOLT3848004");
@@ -55,9 +87,10 @@
             {
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.onreadystatechange = function() { 
-                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
                         var jsn = JSON.parse(xmlHttp.responseText);
                         return jsn.success;
+                    }
                 }
                 xmlHttp.open("GET", theUrl, true); // true for asynchronous 
                 xmlHttp.send();
@@ -73,6 +106,9 @@
                 resp = httpRequest("https://cloud.boltiot.com/remote/9555ccc7-de9e-4493-bf4d-bca28cd5d96d/serialWrite?data="+ cmd +"&deviceName=BOLT3848004");
                 document.getElementById(bId1).disabled = false;
                 document.getElementById(bId2).disabled = true;
+            }
+            function declineDoor() {
+                document.getElementById('openClose').style.visibility = 'hidden';
             }
         </script>
     </body>

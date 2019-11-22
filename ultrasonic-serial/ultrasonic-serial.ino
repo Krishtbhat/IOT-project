@@ -17,7 +17,6 @@ int alert2 = A2;
 float duration, distance;
 bool checkB, activateB, reachingOwner = false;
 
-
 //function prototypes
 void someoneAtTheDoor();
 void openDoor();
@@ -66,10 +65,13 @@ void check(){
   if(distance <= 50 && distance > 1) {
     reachingOwner = true;
     lcd.clear();
+    digitalWrite(buzzer, HIGH);
+    delay(30);
     lcd.setCursor(0, 0);
-    lcd.print("Reaching the ");
+    lcd.print("Reaching owner.");
     lcd.setCursor(0, 1);
-    lcd.print("owner, wait...");
+    lcd.print("Please wait...");
+    digitalWrite(buzzer, LOW);
     checkB = false;
     activateB = true;
     digitalWrite(ledPin, HIGH);
