@@ -37,7 +37,7 @@
             function submitMessage(){
                 msg = document.getElementById("message");
                 if(msg.value != '') {
-                    alert(msg.value);
+                    // alert(msg.value);
                     message = 'a@' + msg.value + '|';
 
                     resp = httpRequest("https://cloud.boltiot.com/remote/9555ccc7-de9e-4493-bf4d-bca28cd5d96d/serialWrite?data="+ message +"&deviceName=BOLT3848004");

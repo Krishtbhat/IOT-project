@@ -17,9 +17,6 @@ int alert2 = A2;
 float duration, distance;
 bool checkB, activateB;
 
-//thread declaration
-//Thread checkThread = Thread();
-//Thread activateThread = Thread();
 
 //function prototypes
 void someoneAtTheDoor();
@@ -41,13 +38,6 @@ void setup() {
   pinMode(ledPin, OUTPUT);
   lcd.begin(16, 2);
   door.attach(doorPin);
-//  Serialiot.setCommandString("OpenDoor", openDoor);
-  //initializing the threads
-//  checkThread.onRun(check);
-//  checkThread.enabled = true;
-//
-//  activateThread.onRun(activate);
-//  activateThread.enabled = false;
   checkB = true;
   activateB = false;
   
@@ -63,8 +53,6 @@ void loop() {
 
 //for check thread
 void check(){
-//  if(Serial.available())
-//    Serial.readString();
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
@@ -75,8 +63,6 @@ void check(){
   distance = (duration*.0343)/2;
   Serial.println(distance);
   if(distance <= 50 && distance > 1) {
-//    checkThread.enabled = false;
-//    activateThread.enabled = true;
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Reaching the ");
@@ -174,23 +160,10 @@ void activate(){
       }
     }
     else{
+      digitalWrite(alert2, HIGH);
       delay(10000);
+      digitalWrite(alert2, LOW);
     }
-    //close the door
-//    start = millis();
-//    while(millis() < 20000+start && command == 'o'){
-//      if(Serial.available()){
-//          command = Serial.read();
-//      }
-//      if(command == 'c')
-//        closeDoor();
-//        break;
-//    }
-//    if(Serial.available()){
-//      if((command = Serial.read()) == 'c'){
-//        closeDoor();
-//      }
-//    }
   }
   else{
     digitalWrite(buzzer, HIGH);
@@ -205,6 +178,7 @@ void activate(){
   }
   if(command == 'c' || command == 'o')
     closeDoor();
+  digitalWrite(alert, LOW);
   checkB = true;
   activateB = false;
 }
@@ -225,6 +199,6 @@ void closeDoor(){
   }
   delay(1000);
   digitalWrite(alert2, HIGH);
-  delay(100);
+  delay(500);
   digitalWrite(alert2, LOW);
 }

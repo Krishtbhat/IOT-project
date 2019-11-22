@@ -78,7 +78,9 @@ https://cloud.boltiot.com/control?name=BOLT3848004"""
         while(start + 180.0 > time.time()):
             blah = mb.digitalRead('2')
             blah = json.loads(blah)
-            print(blah)
+            print("Waiting")
+            # print(blah)
             if blah["value"] == "1":
+                dread1["value"] = '0'
                 break
     time.sleep(1)
