@@ -41,7 +41,8 @@ void setup() {
   activateB = false;
   
 }
-void loop() {
+void loop() 
+{
   if(!reachingOwner)
     lcd.clear();
   if(checkB)
@@ -52,7 +53,8 @@ void loop() {
 }
 
 //for check thread
-void check(){
+void check()
+{
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
@@ -62,7 +64,7 @@ void check(){
   duration = pulseIn(echoPin, HIGH);
   distance = (duration*.0343)/2;
   Serial.println(distance);
-  if(distance <= 50 && distance > 1) {
+  if(distance <= 25 && distance > 1) {
     reachingOwner = true;
     lcd.clear();
     digitalWrite(buzzer, HIGH);
@@ -85,7 +87,8 @@ void check(){
 }
 
 //for activate thread
-void activate(){
+void activate()
+{
   //arduino to the cloud
   digitalWrite(alert, HIGH);
 
@@ -98,7 +101,7 @@ void activate(){
   //waiting till there is something on the software serial for the Serial
   //Serial.println(start);
   while(millis() < 180000+start){
-//    Serial.println(millis());
+    //Serial.println(millis());
     if(bolt.available()){
       //to be printed to the lcd
       char blah = bolt.read();
