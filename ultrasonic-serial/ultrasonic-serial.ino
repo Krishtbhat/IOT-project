@@ -15,7 +15,7 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 int alert = A1;
 int alert2 = A2;
 float duration, distance;
-bool checkB, activateB, reachingOwner = false;
+bool checkB, activateB, reachingOwner = false, doorClosed = true;
 
 //function prototypes
 void someoneAtTheDoor();
@@ -68,7 +68,7 @@ void check()
     reachingOwner = true;
     lcd.clear();
     digitalWrite(buzzer, HIGH);
-    delay(30);
+    delay(20);
     lcd.setCursor(0, 0);
     lcd.print("Reaching owner.");
     lcd.setCursor(0, 1);
@@ -169,7 +169,7 @@ void activate()
     }
     else{
       digitalWrite(alert2, HIGH);
-      delay(10000);
+      delay(1000);
       digitalWrite(alert2, LOW);
     }
   }
@@ -184,7 +184,7 @@ void activate()
     lcd.print("respond. Sorry!");
     delay(10000);
   }
-  if(command == 'c' || command == 'o')
+  if(command == 'c' || !doorClosed)
     closeDoor();
   digitalWrite(alert, LOW);
   checkB = true;
@@ -192,6 +192,7 @@ void activate()
 }
 
 void openDoor(){
+  doorClosed = false;
   for(int i = 90; i>=0; i--){
     door.write(i);
     delay(30);
@@ -200,7 +201,7 @@ void openDoor(){
 }
 
 void closeDoor(){
-  
+  doorClosed = true;
   for(int i = 0; i<=90; i++){
     door.write(i);
     delay(30);
