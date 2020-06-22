@@ -4,11 +4,11 @@ import json, time
 from telgram_credentials.conf_telegram import *
 import subprocess, requests
 
-api_key = "9555ccc7-de9e-4493-bf4d-bca28cd5d96d"
-device_id = "BOLT3848004"
+api_key = "xxxxxxxx-xxxx-xxxx-xxxx-bca28cd5d96d"
+device_id = "BOLTxxxxxxx"
 mb = Bolt(api_key, device_id) 
 
-bot = telegram.Bot(token = "1031896771:AAFlMFR1Q7Z8kdxD9M4MNiPaUZkMBl7hv4I")
+bot = telegram.Bot(token = "1031896771:AAFlMFR1Q7xxxxxxxxxxxxxxxxxxxxxxxxx")
 
 def send_telegram_message(message, img_count):
     """Sends message via Telegram"""
@@ -67,7 +67,7 @@ java code.SimpleRead '''+ image_count +'''
         
         message = """Alert! Someone is near the door!!!
 Click on the following link to display a message.
-https://cloud.boltiot.com/control?name=BOLT3848004"""
+https://cloud.boltiot.com/control?name=BOLTxxxxxxx"""
 
         if image_count == 0:
             telegram_status = send_telegram_message(message, 20)
